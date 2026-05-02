@@ -20,7 +20,10 @@ class DoublyLinkedList:
         self.head = None
         self.tail = None
 
+    # ================== Helpers ==================
+
     # helper: set list to a single node
+    # use in insert_at_head and insert_at_tail when list is empty to initialize the list
     def _set_single_node(self, node: Node):
         self.head = node
         self.tail = node
@@ -30,25 +33,45 @@ class DoublyLinkedList:
 
     # helper: return forward string like "A<->B<->C" or "None"
     def _to_str_forward(self):
+        # 3.3. check for empty list
         if not self.head:
             return 'None'
+        
+        # walk through the list and collect data for string representation
         parts = []
+
+        # asign to a variable to avoid modifying self.head while walking
         node = self.head
+
+        # walk through the list until the end is reached (node is None)
         while node:
             parts.append(str(node.data))
             node = node.next
+        
+        # join parts with <-> to show links between nodes
         return '<->'.join(parts)
 
     # helper: return backward string from tail to head
     def _to_str_backward(self):
+        # 3.3. check for empty list
         if not self.tail:
             return 'None'
+        
+        # walk through the list from tail to head and collect data for string representation
         parts = []
+
+        # asign to a variable to avoid modifying self.tail while walking
         node = self.tail
+
+        # walk through the list until the beginning is reached (node is None)
         while node:
             parts.append(str(node.data))
             node = node.prev
+        
+        # join parts with <-> to show links between nodes
         return '<->'.join(parts)
+
+    # =================== Mock and Display Methods ===================
 
     # 3.1. Insert multiple elements and verify bidirectional traversal: 90<->80<->60<->50
     def create_mock_linked_list(self):
@@ -72,7 +95,7 @@ class DoublyLinkedList:
 
     # 2.4. Display: print insertion result, delete node 90, then print result after deletion
     def display(self):
-        """Print forward representation, remove node 90 and show result."""
+        # use forward string representation to show the list after insertion
         insertion = self._to_str_forward()
         print('1. Inserting multiple elements and verifying bidirectional traversal:', insertion)
 
@@ -101,17 +124,20 @@ class DoublyLinkedList:
         self.head = new_node
         return True
 
-    # 2.2. insert new node at the end (tail)
-    def insert_at_tail(self, value):
-        """Insert value at tail. Return True on success."""
-        new_node = Node(value)
-        if not self.tail:
-            return self._set_single_node(new_node)
-        # link after current tail
-        self.tail.next = new_node
-        new_node.prev = self.tail
-        self.tail = new_node
-        return True
+    # display wrappers required by the assignment
+    def display_forward(self):
+        """Print the list from head to tail in simple format.
+
+        Uses the internal helper to build a string like `A<->B<->C`.
+        """
+        print(self._to_str_forward())
+
+    def display_backward(self):
+        """Print the list from tail to head in simple format.
+
+        Uses the internal helper to build a string like `C<->B<->A`.
+        """
+        print(self._to_str_backward())
 
     # 2.3. remove node by value
     def delete(self, value):
