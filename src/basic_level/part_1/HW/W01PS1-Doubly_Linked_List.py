@@ -50,27 +50,7 @@ class DoublyLinkedList:
         
         # join parts with <-> to show links between nodes
         return '<->'.join(parts)
-
-    # helper: return backward string from tail to head
-    def _to_str_backward(self):
-        # 3.3. check for empty list
-        if not self.tail:
-            return 'None'
-        
-        # walk through the list from tail to head and collect data for string representation
-        parts = []
-
-        # asign to a variable to avoid modifying self.tail while walking
-        node = self.tail
-
-        # walk through the list until the beginning is reached (node is None)
-        while node:
-            parts.append(str(node.data))
-            node = node.prev
-        
-        # join parts with <-> to show links between nodes
-        return '<->'.join(parts)
-
+    
     # =================== Mock and Display Methods ===================
 
     # 3.1. Insert multiple elements and verify bidirectional traversal: 90<->80<->60<->50
@@ -96,17 +76,33 @@ class DoublyLinkedList:
     # display wrappers required by the assignment
     def display_forward(self):
         """Print the list from head to tail in simple format.
-
         Uses the internal helper to build a string like `A<->B<->C`.
         """
-        print(self._to_str_forward())
+        # Inline traversal here so helper is not required.
+        if not self.head:
+            print('None')
+            return
+        parts = []
+        node = self.head
+        while node:
+            parts.append(str(node.data))
+            node = node.next
+        print('<->'.join(parts))
 
     def display_backward(self):
         """Print the list from tail to head in simple format.
-
         Uses the internal helper to build a string like `C<->B<->A`.
         """
-        print(self._to_str_backward())
+        # Inline traversal from tail to head here.
+        if not self.tail:
+            print('None')
+            return
+        parts = []
+        node = self.tail
+        while node:
+            parts.append(str(node.data))
+            node = node.prev
+        print('<->'.join(parts))
 
     # ================== Main Methods ==================
 
