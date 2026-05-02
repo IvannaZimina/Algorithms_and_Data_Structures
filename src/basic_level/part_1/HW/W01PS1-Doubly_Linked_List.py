@@ -118,72 +118,32 @@ class DoublyLinkedList:
 
     # 2.3. remove node by value
     def delete(self, value):
-        # if list empty, nothing to do
+        """Remove first node with given value. Return True if removed."""
+        # empty list
         if not self.head:
             return False
 
-        # asign to a variable to avoid modifying self.head while searching
+        # find the node
         node = self.head
-
-        # search for value in the list and stop when found or end of list reached
         while node and node.data != value:
             node = node.next
 
-        # if node is None, value not found
         if not node:
             return False
 
-        # remove the found node if node is head
-        if node is self.head:
-            # single node
-            if self.head is self.tail:
-                self.head = None
-                self.tail = None
-                return True
-            # more than one node
-            self.head = node.next
-            self.head.prev = None
-            node.next = None
-            return True
-
-        # if node is tail
-        if node is self.tail:
-            self.tail = node.prev
-            self.tail.next = None
-        # node is in middle
-        prev_node = node.prev
-        next_node = node.next
-        prev_node.next = next_node
-        next_node.prev = prev_node
-        node.prev = None
-        node.next = None
-        return True
-
-    # helper: remove a node object from the list (head/tail/middle)
-    def _remove_node(self, node: Node):
-        if node is None:
-            return False
-        # link previous
+        # unlink node: handle head/tail/middle in one place
         if node.prev:
             node.prev.next = node.next
         else:
+            # node is head
             self.head = node.next
-        # link next
+
         if node.next:
             node.next.prev = node.prev
         else:
+            # node is tail
             self.tail = node.prev
+
         node.prev = None
         node.next = None
         return True
-
-    # Simplified delete: find node and call helper
-    def delete(self, value):
-        if not self.head:
-            return False
-        node = self.head
-        while node and node.data != value:
-            node = node.next
-        if not node:
-            return False
-        return self._remove_node(node)
