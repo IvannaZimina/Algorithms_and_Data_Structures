@@ -116,6 +116,20 @@ class DoublyLinkedList:
 
         return True
 
+    # 2.2. insert new node at the end (tail)
+    def insert_at_tail(self, value):
+        """Insert value at tail. Return True on success."""
+        new_node = Node(value)
+        # empty list: initialize single-node list
+        if not self.tail:
+            return self._set_single_node(new_node)
+
+        # attach after current tail
+        self.tail.next = new_node
+        new_node.prev = self.tail
+        self.tail = new_node
+        return True
+
     # 2.3. remove node by value
     def delete(self, value):
         """Remove first node with given value. Return True if removed."""
