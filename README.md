@@ -1,7 +1,3 @@
-gh repo edit --description "Educational algorithms and data-structures examples" \
-git add README.md
-git commit -m "Add README with project description and usage"
-git push origin HEAD
 # Algorithms and Data Structures
 
 This is a small educational repository with examples of common data structures and algorithms.
