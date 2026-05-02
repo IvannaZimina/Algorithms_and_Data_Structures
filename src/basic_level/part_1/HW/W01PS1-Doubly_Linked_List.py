@@ -93,37 +93,6 @@ class DoublyLinkedList:
         self.head = n1
         self.tail = n4
 
-    # 2.4. Display: print insertion result, delete node 90, then print result after deletion
-    def display(self):
-        # use forward string representation to show the list after insertion
-        insertion = self._to_str_forward()
-        print('1. Inserting multiple elements and verifying bidirectional traversal:', insertion)
-
-        # delete node with value 90 and report
-        deleted = self.delete(90)
-        print('Node 90 deleted' if deleted else 'Node 90 not found')
-
-        # print list after deletion and check backward traversal
-        after = self._to_str_forward()
-        backward = self._to_str_backward()
-        # check bidirectional links: forward reversed equals backward
-        forward_parts = after.split('<->') if after != 'None' else []
-        backward_parts = backward.split('<->') if backward != 'None' else []
-        bidir_ok = (not forward_parts and not backward_parts) or (forward_parts[::-1] == backward_parts)
-        print('2. Deleting nodes and checking if the bidirectional property remains intact:', f"{after}", f"(deleted={deleted}, bidirectional={bidir_ok})")
-
-    # 2.1. insert new node at the beginning (head)
-    def insert_at_head(self, value):
-        """Insert value at head. Return True on success."""
-        new_node = Node(value)
-        if not self.head:
-            return self._set_single_node(new_node)
-        # link new node before current head
-        new_node.next = self.head
-        self.head.prev = new_node
-        self.head = new_node
-        return True
-
     # display wrappers required by the assignment
     def display_forward(self):
         """Print the list from head to tail in simple format.
@@ -138,6 +107,21 @@ class DoublyLinkedList:
         Uses the internal helper to build a string like `C<->B<->A`.
         """
         print(self._to_str_backward())
+
+    # ================== Main Methods ==================
+
+    # 2.1. insert new node at the beginning (head)
+    def insert_at_head(self, value):
+        """Insert value at head. Return True on success."""
+        new_node = Node(value)
+        if not self.head:
+            return self._set_single_node(new_node)
+        # link new node before current head
+        new_node.next = self.head
+        self.head.prev = new_node
+        self.head = new_node
+        return True
+
 
     # 2.3. remove node by value
     def delete(self, value):
@@ -188,5 +172,8 @@ linked_list = DoublyLinkedList()
 # create the initial linked list
 linked_list.create_mock_linked_list()
 
-# print the updated linked list
-linked_list.display()
+# print the list from head to tail
+linked_list.display_forward()
+
+# print the list from tail to head
+linked_list.display_backward()
