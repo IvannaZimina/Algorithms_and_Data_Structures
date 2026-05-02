@@ -31,31 +31,10 @@ class DoublyLinkedList:
         node.prev = None
         return True
 
-    # helper: return forward string like "A<->B<->C" or "None"
-    def _to_str_forward(self):
-        # 3.3. check for empty list
-        if not self.head:
-            return 'None'
-        
-        # walk through the list and collect data for string representation
-        parts = []
-
-        # asign to a variable to avoid modifying self.head while walking
-        node = self.head
-
-        # walk through the list until the end is reached (node is None)
-        while node:
-            parts.append(str(node.data))
-            node = node.next
-        
-        # join parts with <-> to show links between nodes
-        return '<->'.join(parts)
-    
     # =================== Mock and Display Methods ===================
 
     # 3.1. Insert multiple elements and verify bidirectional traversal: 90<->80<->60<->50
     def create_mock_linked_list(self):
-        """Create a sample list: 90 <-> 80 <-> 60 <-> 50"""
         n1 = Node(90)
         n2 = Node(80)
         n3 = Node(60)
@@ -73,68 +52,90 @@ class DoublyLinkedList:
         self.head = n1
         self.tail = n4
 
-    # display wrappers required by the assignment
+    # 2.3. Print the list from head to tail. Format: `A<->B<->C` or `None` if empty.
     def display_forward(self):
-        """Print the list from head to tail in simple format.
-        Uses the internal helper to build a string like `A<->B<->C`.
-        """
-        # Inline traversal here so helper is not required.
+        # 3.3. check for empty list
         if not self.head:
             print('None')
             return
+        
+        # walk through the list and collect data for string representation
         parts = []
+
+        # asign to a variable to avoid modifying self.head while walking
         node = self.head
+
+        # walk through the list until the end is reached (node is None)
         while node:
             parts.append(str(node.data))
             node = node.next
+
+        # join parts with <-> to show links between nodes
         print('<->'.join(parts))
 
+    # 2.4. Print the list from tail to head. Format: `C<->B<->A` or `None` if empty.
     def display_backward(self):
-        """Print the list from tail to head in simple format.
-        Uses the internal helper to build a string like `C<->B<->A`.
-        """
-        # Inline traversal from tail to head here.
+        # 3.3. check for empty list
         if not self.tail:
             print('None')
             return
+        
+        # walk through the list and collect data for string representation
         parts = []
+
+        # asign to a variable to avoid modifying self.tail while walking
         node = self.tail
+
+        # walk through the list until the beginning is reached (node is None)
         while node:
             parts.append(str(node.data))
             node = node.prev
+
+        # join parts with <-> to show links between nodes
         print('<->'.join(parts))
 
     # ================== Main Methods ==================
 
     # 2.1. insert new node at the beginning (head)
     def insert_at_head(self, value):
-        """Insert value at head. Return True on success."""
+        # make new node
         new_node = Node(value)
+
+        # if list empty, initialize single-node list
         if not self.head:
             return self._set_single_node(new_node)
+        
         # link new node before current head
         new_node.next = self.head
-        self.head.prev = new_node
-        self.head = new_node
-        return True
 
+        # link current head back to new node
+        self.head.prev = new_node
+
+        # update head to new node
+        self.head = new_node
+
+        return True
 
     # 2.3. remove node by value
     def delete(self, value):
-        """Delete first node with matching value. Return True if removed."""
+        # if list empty, nothing to do
         if not self.head:
             return False
 
+        # asign to a variable to avoid modifying self.head while searching
         node = self.head
-        # search for value
+
+        # search for value in the list and stop when found or end of list reached
         while node and node.data != value:
             node = node.next
 
+        # if node is None, value not found
         if not node:
             return False
 
-        # if node is head
+        # remove the found node if node is head
         if node is self.head:
+            
             # single node
             if self.head is self.tail:
                 self.head = None
@@ -150,26 +151,37 @@ class DoublyLinkedList:
         if node is self.tail:
             self.tail = node.prev
             self.tail.next = None
+        # helper: remove a node object from the list (head/tail/middle)
+        def _remove_node(self, node: Node):
+            # if node has a previous, link it to node.next; otherwise update head
+            if node.prev:
+                node.prev.next = node.next
+            else:
+                self.head = node.next
+
+            # if node has a next, link it to node.prev; otherwise update tail
+            if node.next:
+                node.next.prev = node.prev
+            else:
+                self.tail = node.prev
+
+            # fully detach node
             node.prev = None
+            node.next = None
             return True
 
-        # node is in middle
-        prev_node = node.prev
-        next_node = node.next
-        prev_node.next = next_node
-        next_node.prev = prev_node
-        node.prev = None
-        node.next = None
-        return True
+        # 2.3. remove node by value
+        def delete(self, value):
+            # if list empty, nothing to do
+            if not self.head:
+                return False
 
-# Start of the script
-linked_list = DoublyLinkedList()
+            # search for value
+            node = self.head
+            while node and node.data != value:
+                node = node.next
 
-# create the initial linked list
-linked_list.create_mock_linked_list()
+            if not node:
+                return False
 
-# print the list from head to tail
-linked_list.display_forward()
-
-# print the list from tail to head
-linked_list.display_backward()
+            return self._remove_node(node)
