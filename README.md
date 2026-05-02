@@ -2,7 +2,7 @@
 
 This is a small educational repository with examples of common data structures and algorithms.
 
-Important: all code here is for learning and practice. Do not use this code in production.
+Important: all code here is for learning and practice. It is not optimized for production use. The focus is on clarity and understanding, not performance.
 
 Contents
 - `src/` — code examples and practice tasks (linked lists, queues, hash tables, etc.).
@@ -12,15 +12,7 @@ Run examples
 2. Open a terminal in the project root.
 3. Run a script directly. For example, to run the circular linked list demo:
 
-```bash
-python src/basic_level/part_1/HW/W01PS1-Circular_Linked_List.py
-```
-
 4. Run other examples the same way (change the file path as needed):
-
-```bash
-python src/basic_level/part_1/HW/W01PS1-Linked_List.py
-```
 
 Technologies
 - Python 3
@@ -33,17 +25,5 @@ Notes
 Add repository description and topics
 - On GitHub web: open repository → `Settings` → Repository details, edit Description and Topics.
 - With GitHub CLI (`gh`):
-
-```bash
-gh repo edit --description "Educational algorithms and data-structures examples" \
-  --add-topic algorithms --add-topic data-structures --add-topic education
-```
-
-Git quick commands
-```bash
-git add README.md
-git commit -m "Update README: English simple wording"
-git push origin HEAD
-```
 
 If you want, I can add simple `pytest` tests for key modules or help push and set repository topics. Tell me what you prefer.
