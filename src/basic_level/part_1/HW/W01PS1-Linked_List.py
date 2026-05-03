@@ -134,11 +134,12 @@ class LinkedList:
         # skip the node to be deleted by changing the link
         current.next = current.next.next
 
-# Start of the script
-linked_list = LinkedList()
+if __name__ == "__main__":
+    # Start of the script
+    linked_list = LinkedList()
 
-# create the initial linked list
-linked_list.create_mock_linked_list()
+    # create the initial linked list
+    linked_list.create_mock_linked_list()
 
-# print the updated linked list
-linked_list.display()
+    # print the updated linked list
+    linked_list.display()
