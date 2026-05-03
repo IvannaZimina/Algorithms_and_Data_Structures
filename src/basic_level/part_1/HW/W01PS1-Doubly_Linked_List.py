@@ -1,35 +1,49 @@
 # Replace # TODO: with your code
 
 class Node:
-    def __init__(self, data):
-        """Simple node for doubly linked list.
-
+    def __init__(self, value):
+        """
+        Simple node for doubly linked list.
         Attributes:
-            data: value stored in node
+            value: value stored in node
             next: pointer to next node
             prev: pointer to previous node
         """
-        self.data = data
+        self.value = value
         self.next = None
         self.prev = None
 
 
 class DoublyLinkedList:
+    # Initialize empty list with head and tail.
     def __init__(self):
-        """Initialize empty list with head and tail."""
         self.head = None
         self.tail = None
 
     # ================== Helpers ==================
 
-    # helper: set list to a single node
-    # use in insert_at_head and insert_at_tail when list is empty to initialize the list
+    # helper: initialize the list with one node (head and tail are the same)
+    # use in insert_at_head and insert_at_tail when list is empty
     def _set_single_node(self, node: Node):
         self.head = node
         self.tail = node
         node.next = None
         node.prev = None
         return True
+
+    # helper: convert list to string starting from a node and following a direction (next or prev)
+    # use in display methods to create string representation of the list
+    def _to_str(self, start_node, direction_attr):
+        if not start_node:
+            return 'None'
+
+        # list to hold string parts for joining
+        parts = []
+        node = start_node
+        while node:
+            parts.append(str(node.value))
+            node = getattr(node, direction_attr)
+        return '<->'.join(parts)
 
     # =================== Mock and Display Methods ===================
 
@@ -57,42 +71,42 @@ class DoublyLinkedList:
         # 3.3. check for empty list
         if not self.head:
             print('None')
-            return
-        
-        # walk through the list and collect data for string representation
-        parts = []
+            return False
 
-        # asign to a variable to avoid modifying self.head while walking
-        node = self.head
+        print(self._to_str(self.head, 'next'))
 
-        # walk through the list until the end is reached (node is None)
-        while node:
-            parts.append(str(node.data))
-            node = node.next
+        # 3.2. Delete nodes (ex. node 60) and check if bidirectional links remain intact.
+        deleted = self.delete(60)
+        print('Node 60 deleted' if deleted else 'Node 60 not found')
 
-        # join parts with <-> to show links between nodes
-        print('<->'.join(parts))
+        # check for empty list after deletion
+        if not self.head:
+            print('None')
+            return False
+
+        print(self._to_str(self.head, 'next'))
+        return True
 
     # 2.4. Print the list from tail to head. Format: `C<->B<->A` or `None` if empty.
     def display_backward(self):
         # 3.3. check for empty list
         if not self.tail:
             print('None')
-            return
-        
-        # walk through the list and collect data for string representation
-        parts = []
+            return False
 
-        # asign to a variable to avoid modifying self.tail while walking
-        node = self.tail
+        print(self._to_str(self.tail, 'prev'))
 
-        # walk through the list until the beginning is reached (node is None)
-        while node:
-            parts.append(str(node.data))
-            node = node.prev
+        # 3.2. Delete nodes (ex. node 80) and check if bidirectional links remain intact.
+        deleted = self.delete(80)
+        print('Node 80 deleted' if deleted else 'Node 80 not found')
 
-        # join parts with <-> to show links between nodes
-        print('<->'.join(parts))
+        # check for empty list after deletion
+        if not self.tail:
+            print('None')
+            return False
+
+        print(self._to_str(self.tail, 'prev'))
+        return True
 
     # ================== Main Methods ==================
 
@@ -101,14 +115,14 @@ class DoublyLinkedList:
         # make new node
         new_node = Node(value)
 
-        # if list empty, initialize single-node list
+        # if the list is empty, make this node the only element
         if not self.head:
             return self._set_single_node(new_node)
         
-        # link new node before current head
+        # the new node points to the current head
         new_node.next = self.head
 
-        # link current head back to new node
+        # the old head now points back to the new node.
         self.head.prev = new_node
 
         # update head to new node
@@ -118,46 +132,83 @@ class DoublyLinkedList:
 
     # 2.2. insert new node at the end (tail)
     def insert_at_tail(self, value):
-        """Insert value at tail. Return True on success."""
+        # make new node
         new_node = Node(value)
-        # empty list: initialize single-node list
+
+        # if the list is empty, make this node the only element
         if not self.tail:
             return self._set_single_node(new_node)
 
-        # attach after current tail
+        # the current tail points to the new node
         self.tail.next = new_node
+
+        # the new node points back to the current tail
         new_node.prev = self.tail
+
+        # update tail to new node
         self.tail = new_node
+
         return True
 
-    # 2.3. remove node by value
+    # 2.3. Remove a node with the given value.
     def delete(self, value):
-        """Remove first node with given value. Return True if removed."""
-        # empty list
+        # 3.3. check for empty list
         if not self.head:
             return False
 
-        # find the node
+        # store the head node for traversal
         node = self.head
-        while node and node.data != value:
+
+        # move forward until the value is found or reach the end
+        while node and node.value != value:
             node = node.next
 
+        # check if node with value was found
         if not node:
             return False
 
-        # unlink node: handle head/tail/middle in one place
+        # === To correctly remove a node and preserve the list links in all cases, checks are needed: ===
+
+        # if this is not the head, skip it by linking prev -> next
         if node.prev:
             node.prev.next = node.next
         else:
-            # node is head
+            # if this is the head, move head to the next node
             self.head = node.next
 
+        # if this is not the tail, skip it by linking next -> prev
         if node.next:
             node.next.prev = node.prev
         else:
-            # node is tail
+            # if this is the tail, move tail to the previous node
             self.tail = node.prev
 
+        # clear node's next and prev to fully remove it from the list
         node.prev = None
         node.next = None
+
         return True
+
+# Start of the script
+linked_list = DoublyLinkedList()
+
+# create the initial linked list
+linked_list.create_mock_linked_list()
+
+# Print the list from head to tail.
+print('Forward (head to tail):')
+linked_list.display_forward()
+
+# Print the list from tail to head.
+print('Backward (tail to head):')
+linked_list.display_backward()
+
+# ================ Expected Output: ================
+# Forward (head to tail):
+# 90<->80<->60<->50
+# Node 60 deleted
+# 90<->80<->50
+# Backward (tail to head):
+# 50<->80<->90
+# Node 80 deleted
+# 50<->90
