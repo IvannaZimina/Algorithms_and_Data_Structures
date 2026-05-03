@@ -52,21 +52,25 @@ class HashData:
     # insert data to hash table
     def put(self, key):
         # insert into table
-        
+        index = self.hash_function(key)
+
         # if the slot is empty
-        
+        if self.table[index] is None:
             # create a linked list at the slot
-        
+            self.table[index] = LinkedList()
+
         # append item to the linked list
-        
+        self.table[index].append(key)
 
     # display hash table
     def display(self):
-        
+        for hash_value, slot in enumerate(self.table):
             # if slot is a linked list
-
+            if isinstance(slot, LinkedList):
+                print(f"{hash_value}: {slot.traverse()}")
             # if slot is empty
-
+            else:
+                print(f"{hash_value}: None")
 
 
 hash1 = HashData()
