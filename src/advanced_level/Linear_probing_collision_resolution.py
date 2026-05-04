@@ -10,13 +10,18 @@ class HashData:
 
     # insert data to hash table
     def put(self, key):
-        while self.table[hash_value]:
+        hash_value = self.hash_function(key)
+        while self.table[hash_value] is not None:
             # move to next slot until empty space is found
+            hash_value = (hash_value + 1) % len(self.table)
 
         # insert into empty slot
+        self.table[hash_value] = key
 
     # display hash table
     def display(self):
+        for hash_value, key in enumerate(self.table):
+            print(f"{hash_value}: {key}")
 
 
 # keys
