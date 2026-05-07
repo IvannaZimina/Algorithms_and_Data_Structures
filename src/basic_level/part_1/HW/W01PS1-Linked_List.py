@@ -1,14 +1,14 @@
 # Replace # TODO: with your code
 
 class Node:
-    def __init__(self, data):
+    def __init__(self, value):
         """_summary_
 
         Args:
-            data (_type_): _description_
+            value (_type_): _description_
         """
         # TODO:
-        self.data = data
+        self.value = value
         self.next = None
 
 
@@ -18,34 +18,20 @@ class LinkedList:
         """
         self.head = None
 
-    # create the linked list: 90->80->60->50
-    def create_mock_linked_list(self):
-        """_summary_
-        """
-        node1 = Node(90)
-        node2 = Node(80)
-        node3 = Node(60)
-        node4 = Node(50)
-
-        self.head = node1
-        node1.next = node2
-        node2.next = node3
-        node3.next = node4
-
     # display linked list in format: A->B->C
     def display(self):
         """_summary_
         """
         current = self.head
         while current:
-            print(f"{current.data}", end="->")
+            print(f"{current.value}", end="->")
             current = current.next
         print(None)
 
-    # method to append a node
-    def append(self, data):
+    # Insert a new node at the end.
+    def insert_at_tail(self, value):
         # create new node with the given data
-        new_node = Node(data)
+        new_node = Node(value)
 
         # If the list has no head, the new node becomes the head (so the list now has one node).
         if self.head is None:
@@ -62,84 +48,81 @@ class LinkedList:
         # finally, append the new node at the end of the linked list
         current.next = new_node
 
-    # insert node to linked list
-    def insert_node(self, data, position: int):
+    # Insert a new node at the beginning.
+    def insert_at_head(self, value):
         """_summary_
 
         Args:
-            data (_type_): _description_
-            position (_type_): _description_
+            value (_type_): _description_
         """
-        new_node = Node(data)
+        # create new node with the given data
+        new_node = Node(value)
 
-        # if the position is 0, new element becomes the new head of the linked list and the old head becomes the next element of the new head
-        if position == 0:
-            new_node.next = self.head
-            self.head = new_node
-            return
+        # assign new node's next to current head
+        new_node.next = self.head
+        # update head to new node
+        self.head = new_node
 
-        # start from the head of the list
-        current = self.head
-
-        # traverse to the position where the new node will be inserted
-        for _ in range(position - 1):
-            # if current becomes None, position is invalid
-            if current is None:
-                raise IndexError("Position out of bounds")
-            #  move to the next node
-            current = current.next
-
-        # new node points to the next node of current
-        new_node.next = current.next
-
-        # current now points to the new node
-        current.next = new_node
-
-    # method to delete node at the given position
-    def delete_node(self, position: int):
+    # method to delete node with the given value
+    def delete(self, value):
         """_summary_
 
         Args:
-            position (int): _description_
+            value (_type_): _description_
         """
         # if the linked list is empty, print a message and return
         if self.head is None:
             print("List is empty")
             return
 
-        # if position is 0, remove the first node (head)
-        if position == 0:
-            # self.head.next (position) equals None
-            # self.head becoms None
+        # if the head node matches, remove the first node (head)
+        if self.head.value == value:
+            # self.head.next equals None
+            # self.head becomes None
             # list becomes empty
             self.head = self.head.next
             return
 
         # start from the head of the list
-        current = self.head
-
-        # index counter to track current position
-        index = 0
+        previous = self.head
+        current = self.head.next
 
         # traverse to the node just before the one we want to delete
-        while current.next and index < position - 1:
+        while current:
+            if current.value == value:
+                # skip the node to be deleted by changing the link
+                previous.next = current.next
+                return
+            previous = current
             current = current.next
-            index += 1
 
-        # if current.next is None, it means the position is out of range
-        if current.next is None:
-            print("Position out of range")
-            return
-
-        # skip the node to be deleted by changing the link
-        current.next = current.next.next
+        # if current is None, it means the value is not in the list
+        print("Value not found")
 
 if __name__ == "__main__":
     # Start of the script
     linked_list = LinkedList()
 
     # create the initial linked list
-    linked_list.create_mock_linked_list()
+    linked_list.insert_at_head(80)
+    linked_list.insert_at_head(90)
+    linked_list.insert_at_tail(60)
+    linked_list.insert_at_tail(50)
 
     # print the updated linked list
     linked_list.display()
+
+    # delete specific elements and check correctness
+    linked_list.delete(90)
+    linked_list.display()
+
+    # edge case: value not found
+    linked_list.delete(999)
+    linked_list.display()
+
+# ================ Expected Output: ================
+
+# 90->80->60->50->None
+# 80->60->50->None
+# Value not found
+# 80->60->50->None
