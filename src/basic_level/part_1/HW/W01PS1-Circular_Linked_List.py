@@ -1,13 +1,13 @@
 # Replace # TODO: with your code
 
 class Node:
-    def __init__(self, data):
+    def __init__(self, value):
         """ 1. Define a Node class with:
-            data: A value attribute to store data.
+            value: A value attribute to store data.
             next: A next pointer linking to the next node.
         """
         # A value attribute to store data.
-        self.data = data
+        self.value = value
         # A next pointer linking to the next node.
         self.next = None
 
@@ -43,25 +43,6 @@ class CircularLinkedList:
         node.next = node
         return True
 
-    # helper: get node at position (0-based). return None if out of bounds
-    # use in insert_node and delete_node to find nodes by position
-    def _get_node_at(self, position: int):
-        # 3.3. check for empty list or invalid position
-        if not self.head or position < 0:
-            return None
-
-        node = self.head
-        idx = 0
-
-        # walk through the list until the desired position is reached or come back to head
-        while idx < position:
-            node = node.next
-            # if a full circle complete, position is out of bounds
-            if node is self.head:
-                return None
-            idx += 1
-        return node
-    
     # ==================== Mock and Display Methods ====================
 
     # helper: return string representation of list like "A->B->C->A" or "None"
@@ -71,14 +52,14 @@ class CircularLinkedList:
 
         parts = []
         node = self.head
-        parts.append(str(node.data))
+        parts.append(str(node.value))
         node = node.next
         while node is not self.head:
-            parts.append(str(node.data))
+            parts.append(str(node.value))
             node = node.next
 
         # show that it returns to head
-        parts.append(str(self.head.data))
+        parts.append(str(self.head.value))
         return '->'.join(parts)
 
     # helper: create a mock circular linked list with 4 nodes (90->80->60->50->90) and set head to node 90
@@ -104,17 +85,9 @@ class CircularLinkedList:
     def display(self):
         """_summary_
         """
-        # 3.1. Insert multiple elements and verify circular linkage.
+        # print elements in order and show that it loops back to head
         insertion = self._to_str()
         print('Circular linked list:', insertion)
-
-        # 3.2. Delete nodes (ex. node 90) and check if the circular property remains intact.
-        deleted = self.delete(90)
-        print('Node 90 deleted' if deleted else 'Node 90 not found')
-
-        # print list after deletion
-        after = self._to_str()
-        print('Circular linked list after deletion:', after)
     
     # ================== Main Methods ==================
 
@@ -166,7 +139,7 @@ class CircularLinkedList:
             return False
 
         # if head holds the value
-        if self.head.data == value:
+        if self.head.value == value:
             # then if head is the only node, just remove it
             if self._is_single():
                 self.head = None
@@ -190,7 +163,7 @@ class CircularLinkedList:
         
         # loop until we come back to head
         while curr is not self.head:
-            if curr.data == value:
+            if curr.value == value:
                 # skip the current node
                 prev.next = curr.next
                 return True
@@ -205,14 +178,35 @@ class CircularLinkedList:
 # Start of the script
 linked_list = CircularLinkedList()
 
-# create the initial linked list
-linked_list.create_mock_linked_list()
-
-# print the updated linked list
+# 3.1. Insert multiple elements and verify circular linkage.
+linked_list.insert_at_head(80)
+linked_list.insert_at_head(90)
+linked_list.insert_at_tail(60)
+linked_list.insert_at_tail(50)
 linked_list.display()
 
-# ================ Expected Output: ================
+# 3.2. Delete nodes and check if the circular property remains intact.
+deleted = linked_list.delete(90)
+print('Node 90 deleted' if deleted else 'Node 90 not found')
+linked_list.display()
 
+# 3.3. Handle edge cases: empty list and deleting the only node.
+empty_list = CircularLinkedList()
+deleted_empty = empty_list.delete(1)
+print('Delete from empty list:', 'Success' if deleted_empty else 'Not found')
+
+single_list = CircularLinkedList()
+single_list.insert_at_head(10)
+single_list.display()
+deleted_single = single_list.delete(10)
+print('Delete only node:', 'Success' if deleted_single else 'Not found')
+single_list.display()
+
+# ================ Expected Output: ================
 # Circular linked list: 90->80->60->50->90
 # Node 90 deleted
-# Circular linked list after deletion: 80->60->50->80
+# Circular linked list: 80->60->50->80
+# Delete from empty list: Not found
+# Circular linked list: 10->10
+# Delete only node: Success
+# Circular linked list: None
