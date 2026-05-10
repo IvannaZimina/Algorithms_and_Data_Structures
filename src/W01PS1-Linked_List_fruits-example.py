@@ -15,7 +15,7 @@ class LinkedList:
     def insert_at_head(self, value):
         new_node = Node(value) # just create node → [orange | next = None]
 
-        # current head becomes the second node in the list
+        # store reference to the old head inside the new node
         new_node.next = self.head # remember old head [orange | next → apple]
 
         # Now the new node becomes the head: head → orange
