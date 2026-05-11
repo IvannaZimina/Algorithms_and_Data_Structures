@@ -15,9 +15,10 @@ build/
 dist/
 *.egg-info/
 
-# levels files
+# another files
 advanced_level/
 basic_level/
+educational_files/
 
 # OS files
 .DS_Store
