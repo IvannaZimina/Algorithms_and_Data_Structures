@@ -12,6 +12,7 @@ class LinkedList:
         # if the list is empty, head = None
         self.head = None
 
+    # O(1) - constant time
     def insert_at_head(self, value):
         new_node = Node(value) # just create node → [orange | next = None]
 
@@ -21,6 +22,7 @@ class LinkedList:
         # Now the new node becomes the head: head → orange
         self.head = new_node
 
+    # O(n) - linear time
     def insert_at_tail(self, value):
         new_node = Node(value) # just create node → [grape | next = None]
 

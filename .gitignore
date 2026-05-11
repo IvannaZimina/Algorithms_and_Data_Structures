@@ -15,6 +15,10 @@ build/
 dist/
 *.egg-info/
 
+# levels files
+advanced_level/
+basic_level/
+
 # OS files
 .DS_Store
 Thumbs.db
