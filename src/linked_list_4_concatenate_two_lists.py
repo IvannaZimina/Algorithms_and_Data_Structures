@@ -1,5 +1,3 @@
-from rpds import List
-
 from linked_list_1_fruits_example import LinkedList
 
 class ExtendedLinkedList(LinkedList):
